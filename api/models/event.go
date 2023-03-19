@@ -6,36 +6,34 @@ import (
 )
 
 type Event struct {
-    ID            primitive.ObjectID     `json:"id"`
-    EventType     string                 `json:"event_type"`
-    EventTime     time.Time              `json:"event_time"`
-    CommonFields  map[string]interface{} `json:"common_fields"`
-    EventFields   map[string]interface{} `json:"event_fields"`
+    ID            primitive.ObjectID     `json:"id" bson:"_id"`
+    EventType     int                    `json:"event_type" bson:"event_type"`
+    EventTime     time.Time              `json:"event_time" bson:"event_time"`
+    UserID        primitive.ObjectID     `json:"user_id" bson:"user_id"`
+    Status        int                    `json:"status" bson:"status"`
+    EventFields   map[string]interface{} `json:"event_fields" bson:"event_fields"`
 }
 
-type CommonFields struct {
-    UserID    primitive.ObjectID `json:"user_id"`
+type EventPayload struct {
+    EventType     string                 `json:"event_type" bson:"event_type"`
+    EventTime     time.Time              `json:"event_time" bson:"event_time"`
+    UserID        primitive.ObjectID     `json:"user_id" bson:"user_id"`
+    ServiceName   string                 `json:"service_name" bson:"service_name"`
+    Status        string                 `json:"status" bson:"status"`
+    EventFields   map[string]interface{} `json:"event_fields" bson:"event_fields"`
 }
 
-type CustomerCreatedEvent struct {
-    CommonFields
-    FirstName string `json:"first_name"`
-    LastName  string `json:"last_name"`
-    Email     string `json:"email"`
+func (e *Event) Prepare() {
+	e.ID = primitive.NewObjectID();
 }
 
-type CustomerActionPerformedEvent struct {
-    CommonFields
-    ActionName string `json:"action_name"`
-    ResourceID string `json:"resource_id"`
-}
-
-type CustomerBilledEvent struct {
-    CommonFields
-    Amount float64 `json:"amount"`
-}
-
-type CustomerDeactivatedEvent struct {
-    CommonFields
-    Reason string `json:"reason"`
+func (payload *EventPayload) ToEvent(eventType int, status int) Event {
+    event := Event{
+        EventType: eventType,
+        EventTime: payload.EventTime,
+		UserID: payload.UserID,
+		Status: status,
+        EventFields: payload.EventFields,
+    }
+    return event
 }
