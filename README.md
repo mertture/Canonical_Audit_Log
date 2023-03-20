@@ -433,6 +433,7 @@ curl -X DELETE \
 ```bash
 curl -X GET \
   http://localhost:8080/api/health-check
+```
 
 
 ## Design and Architecture Decisions
