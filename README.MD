@@ -79,6 +79,14 @@ The microservice is designed using the following architecture:
 
 ## API Endpoints
 
+- POST /api/users/register
+- POST /api/users/login
+- POST /api/events
+- GET /api/events
+- GET /api/events/:id
+- DELETE /api/events/:id
+- GET /api/events/types/:id
+
 
 ### **User Endpoints**
 
