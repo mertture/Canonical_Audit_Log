@@ -130,4 +130,121 @@ Authorization: Bearer [JWT token]
 {
   "message": "Successfully added create event to the MQ"
 }
-```   
+```  
+
+**Get All Events Endpoint**
+- GET /api/events
+
+This endpoint retrieves all events stored in the system.
+
+**Request Headers**
+
+Authorization: Bearer [JWT token]
+
+**Response**
+
+**Status Code: 200**
+
+**Body:**
+
+```
+{
+    {
+        "event_type": <int>,
+        "event_time": <string>,
+        "user_id": <string>,
+        "service_name": <string>,
+        "status": <int>,
+        "event_fields": {
+          "field1": <value>,
+          "field2": <value>,
+          ...
+        }
+    },
+    ...
+}
+```
+
+**GetEventByID**
+- GET /api/events/:id
+
+This endpoint retrieves event with specific ID stored in the system.
+
+**Request Headers**
+
+Authorization: Bearer [JWT token]
+
+**Response**
+
+**Status Code: 200**
+
+**Body:**
+```
+{
+    "event_type": <int>,
+    "event_time": <string>,
+    "user_id": <string>,
+    "service_name": <string>,
+    "status": <int>,
+    "event_fields": {
+      "field1": <value>,
+      "field2": <value>,
+      ...
+    }
+}
+```
+
+**GetEventsByTypeID**
+- GET /api/events/types/:id
+
+This endpoint retrieves events with specific typeIDs stored in the system.
+
+**Request Headers**
+
+Authorization: Bearer [JWT token]
+
+**Response**
+
+**Status Code: 200**
+
+**Body:**
+```
+{
+    {
+        "event_type": <int>,
+        "event_time": <string>,
+        "user_id": <string>,
+        "service_name": <string>,
+        "status": <int>,
+        "event_fields": {
+          "field1": <value>,
+          "field2": <value>,
+          ...
+        }
+    },
+    ...
+}
+```
+
+**DeleteEventByID**
+- DELETE /api/events/:id
+
+This endpoint deletes event with specific ID stored in the system.
+
+**Request Headers**
+
+Authorization: Bearer [JWT token]
+
+**Response**
+
+**Status Code: 200**
+
+**Body:**
+```
+{
+    "message": "Successfully deleted the event"
+}
+```
+
+
+
