@@ -86,6 +86,7 @@ The microservice is designed using the following architecture:
 - GET /api/events/:id
 - GET /api/events/types/:id
 - DELETE /api/events/:id
+- GET /api/health-check
 
 
 ### **User Endpoints**
@@ -419,6 +420,13 @@ curl -X GET \
   -H 'Authorization: Bearer <token>'
 ```
 
+8. Health check for the service
+
+```bash
+curl -X GET \
+  http://localhost:8080/api/health-check \
+```
+
 8. Delete events by event ID by sending a DELETE request to the /api/events/:id endpoint with the Authorization header set to the value of the token field. 
 
 ```bash
@@ -426,3 +434,27 @@ curl -X DELETE \
   http://localhost:8080/api/events/:id \
   -H 'Authorization: Bearer <token>'
 ```
+
+
+
+## Design and Architecture Decisions
+
+- **Use of MongoDB:** MongoDB was chosen as the primary database for storing events due to its ability to scale horizontally and handle large volumes of write-heavy data. The trade-off, however, is that it may not be the best choice for use cases that require complex queries or transactions.
+
+- **Use of RabbitMQ:** RabbitMQ was chosen as the message broker to handle the asynchronous creation of events due to its reliability, scalability, and ability to handle high volumes of messages. The trade-off, however, is that it adds complexity to the system and requires additional setup and configuration.
+
+- **Use of JSON Web Tokens (JWT):** JWTs were chosen as the authentication mechanism due to their statelessness, ease of use, and ability to be used across multiple services. The trade-off, however, is that JWTs can be vulnerable to attacks such as token stealing or replay attacks.
+
+**There are several areas that could be improved in this project, including:**
+
+- **Load balancing:** The current implementation does not include any load balancing mechanism, which may lead to uneven distribution of requests and impact the overall performance of the system.
+
+- **Caching:** The current implementation does not include any caching mechanism, which may lead to higher response times for frequently accessed data. Implementing a caching mechanism such as Redis or Memcached to reduce response times for frequently accessed data.
+
+- **Monitoring:** The current implementation has health-check endpoint but does not include any monitoring mechanism, which may make it difficult to detect and diagnose issues in the system.
+
+- **Security:** The current implementation includes basic authentication and authorization mechanisms, but it may not be sufficient for applications with higher security requirements.
+
+
+
+
