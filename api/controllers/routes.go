@@ -14,9 +14,13 @@ func (s *Server) initializeRoutes() {
 	s.Router.POST("/api/events", middlewares.SetMiddlewareAuthentication(s.CreateEvent))
 	s.Router.GET("/api/events", middlewares.SetMiddlewareAuthentication(s.GetAllEvents))
 	s.Router.GET("/api/events/:id", middlewares.SetMiddlewareAuthentication(s.GetEventByID))
+	s.Router.GET("/api/events/types/:id", middlewares.SetMiddlewareAuthentication(s.GetEventByTypeID))
+
 	s.Router.DELETE("/api/events/:id", middlewares.SetMiddlewareAuthentication(s.DeleteEvent))
 
-	s.Router.GET("/api/events/types/:id", middlewares.SetMiddlewareAuthentication(s.GetEventByTypeID))
+	s.Router.GET("/api/health-check", middlewares.SetMiddlewareJSON(s.HealthCheck))
+	
+
 	
 
 

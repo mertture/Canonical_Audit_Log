@@ -10,6 +10,7 @@ import (
 	"github.com/mertture/audit-log/api/constants"
 	"github.com/mertture/audit-log/api/models"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -87,14 +88,13 @@ func (server *Server) GetEventByID(c *gin.Context) {
 	defer cancel()
 
 	// Get event ID from URL parameter
-	eventID := c.Param("id")
+	eventID, err := primitive.ObjectIDFromHex(c.Param("id"))
 
 	// Query event from MongoDB by ID
 	collection := server.DB.Collection("Event")
 	filter := bson.M{"_id": eventID}
-
 	event := models.Event{}
-	err := collection.FindOne(ctx, filter).Decode(&event)
+	err = collection.FindOne(ctx, filter).Decode(&event)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			c.JSON(http.StatusNotFound, gin.H{"message": "Event not found"})
@@ -155,7 +155,8 @@ func (server *Server) DeleteEvent(c *gin.Context) {
 	defer cancel()
 
 	// Get event ID from URL parameter
-	eventID := c.Param("id")
+	eventID, err := primitive.ObjectIDFromHex(c.Param("id"))
+
 
 	// Delete event from MongoDB by ID
 	collection := server.DB.Collection("Event")
