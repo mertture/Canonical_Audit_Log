@@ -343,3 +343,86 @@ The RabbitMQ implementation consists of the following components:
 
 **Implementation Details**
 To implement the RabbitMQ integration, we used the github.com/streadway/amqp library for Go. This library provides a simple API for interacting with RabbitMQ.
+
+
+
+## CURLs For Testing the API
+
+1. Start the server by running the main.go file:
+```
+go run main.go
+```
+
+2. Create a user account by sending a POST request to the /api/users/register endpoint. Replace the email and password values with your own values.
+```bash
+curl -X POST \
+  http://localhost:8080/api/users/register \
+  -H 'Content-Type: application/json' \
+  -d '{
+        "email": "example@example.com",
+        "password": "mypassword"
+      }'
+```
+3. Log in to the user account by sending a POST request to the /api/users/login endpoint. Replace the email and password values with your own values.
+```bash
+curl -X POST \
+  http://localhost:8080/api/users/login \
+  -H 'Content-Type: application/json' \
+  -d '{
+        "email": "example@example.com",
+        "password": "mypassword"
+      }'
+```
+
+4. Copy the value of the token field in the response.
+Create an event by sending a POST request to the /api/events endpoint with the Authorization header set to the value of the token field from the previous step. Replace the user_id and service_name values with your own values.
+
+```bash
+curl -X POST \
+  http://localhost:8080/api/events \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer <token>' \
+  -d '{
+        "event_type": 1,
+        "event_time": "2022-03-18T00:00:00Z",
+        "user_id": "614e8c65b2e2b12345abcde1",
+        "service_name": "my_service",
+        "status": 1,
+        "event_fields": {
+          "field1": "value1",
+          "field2": 2
+        }
+      }'
+```
+
+5. Retrieve all events by sending a GET request to the /api/events endpoint with the Authorization header set to the value of the token field.
+
+```bash
+curl -X GET \
+  http://localhost:8080/api/events \
+  -H 'Authorization: Bearer <token>'
+```
+
+6. Retrieve events by event type ID by sending a GET request to the /api/events/types/:id endpoint with the Authorization header set to the value of the token field.
+
+```bash
+curl -X GET \
+  http://localhost:8080/api/events/types/:id \
+  -H 'Authorization: Bearer <token>'
+```
+
+7. Retrieve events by event ID by sending a GET request to the /api/events/:id endpoint with the Authorization header set to the value of the token field.
+
+```bash
+curl -X GET \
+  http://localhost:8080/api/events/:id \
+  -H 'Authorization: Bearer <token>'
+```
+
+8. Delete events by event ID by sending a DELETE request to the /api/events/:id endpoint with the Authorization header set to the value of the token field. 
+
+```bash
+curl -X DELETE \
+  http://localhost:8080/api/events/:id \
+  -H 'Authorization: Bearer <token>'
+```
