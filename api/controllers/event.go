@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -96,7 +95,6 @@ func (server *Server) GetEventByID(c *gin.Context) {
 	filter := bson.M{"_id": eventID}
 	event := models.Event{}
 	err = collection.FindOne(ctx, filter).Decode(&event)
-	fmt.Println("evv:", event);
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			c.JSON(http.StatusNotFound, gin.H{"message": "Event not found"})
