@@ -84,8 +84,8 @@ The microservice is designed using the following architecture:
 - POST /api/events
 - GET /api/events
 - GET /api/events/:id
-- DELETE /api/events/:id
 - GET /api/events/types/:id
+- DELETE /api/events/:id
 
 
 ### **User Endpoints**
@@ -189,11 +189,11 @@ Authorization: Bearer [JWT token]
 **Request Body**
 ```
 {
-  "event_type": <int>,
+  "event_type": <string>,
   "event_time": <string>,
   "user_id": <string>,
   "service_name": <string>,
-  "status": <int>,
+  "status": <string>,
   "event_fields": {
     "field1": <value>,
     "field2": <value>,
@@ -232,11 +232,11 @@ Authorization: Bearer [JWT token]
 ```
 {
     {
-        "event_type": <int>,
+        "event_type": <string>,
         "event_time": <string>,
         "user_id": <string>,
         "service_name": <string>,
-        "status": <int>,
+        "status": <string>,
         "event_fields": {
           "field1": <value>,
           "field2": <value>,
@@ -262,11 +262,11 @@ Authorization: Bearer [JWT token]
    - **Body:**
 ```
 {
-    "event_type": <int>,
+    "event_type": <string>,
     "event_time": <string>,
     "user_id": <string>,
     "service_name": <string>,
-    "status": <int>,
+    "status": <string>,
     "event_fields": {
       "field1": <value>,
       "field2": <value>,
@@ -293,11 +293,11 @@ Authorization: Bearer [JWT token]
 ```
 {
     {
-        "event_type": <int>,
+        "event_type": <string>,
         "event_time": <string>,
         "user_id": <string>,
         "service_name": <string>,
-        "status": <int>,
+        "status": <string>,
         "event_fields": {
           "field1": <value>,
           "field2": <value>,
@@ -383,11 +383,11 @@ curl -X POST \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer <token>' \
   -d '{
-        "event_type": 1,
+        "event_type": "event_type",
         "event_time": "2022-03-18T00:00:00Z",
         "user_id": "614e8c65b2e2b12345abcde1",
         "service_name": "my_service",
-        "status": 1,
+        "status": "success",
         "event_fields": {
           "field1": "value1",
           "field2": 2
