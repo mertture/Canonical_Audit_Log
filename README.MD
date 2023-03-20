@@ -2,9 +2,68 @@
 
 This microservice API is designed to receive, store, and retrieve audit log events. It is built with Golang and MongoDB, and uses RabbitMQ for write-intensive operations.
 
+## How to Run for the first time
+
+**Install and Start RabbitMQ**
+
+## For MacOS
+
+``` bash
+$ brew install rabbitmq
+```
+Running RabbitMQ on local
+``` bash
+$ brew services start rabbitmq
+```
+
+Stopping RabbitMQ on local
+``` bash
+$ brew services stop rabbitmq
+```
+
+## For Ubuntu 
+
+You can follow the documentation
+
+https://www.rabbitmq.com/install-debian.html
+
+## Continuing with cloning the repository
+
+**Clone the repository**
+```bash
+git clone https://github.com/mertture/canonical_audit_log.git
+```
+
+**Install the go packages**
+``` bash
+$ cd location-of-repo
+$ go mod download
+```
+
+**Run the Service**
+```bash
+$ go run main.go
+```
+
+### Single Command For Starting After Running the RabbitMQ Server
+```bash
+git clone https://github.com/mertture/canonical_audit_log.git
+cd canonical_audit_log
+go mod download
+go run main.go
+```
+
+
+## Config Variables
+
+```bash
+DB_URL=<your-mongodb-uri>
+AMQP_URL=<your-rabbitmq-uri>
+```
+
 ## Features
 
-- User authentication using email and password
+- User authentication (JWT) using email and password
 - Creation and retrieval of audit log events
 - Retrieval of audit log events by event type
 - Event payload validation using JSON schema
@@ -20,9 +79,13 @@ The microservice is designed using the following architecture:
 
 ## API Endpoints
 
-### User Endpoints
 
-**User Registration**
+### **User Endpoints**
+
+
+### **User Registration**
+
+
 - POST /api/users/register
 
 Registers a new user with the provided email and password.
@@ -30,18 +93,19 @@ Registers a new user with the provided email and password.
 **Request Payload**
 ```
 {
-    "email": "user@example.com",
-    "password": "mypassword"
+    "email": <email>,
+    "password": <string>
 }
 ```
 **Response Payload**
 ```
 {
-    "id": "6165152c2d9ca44f2c4ee4b1",
+    "id": <string>,
 }
 ```
 
-**User Login Endpoint**
+### **User Login Endpoint**
+
 - POST /api/users/login
 
 This endpoint is used for authenticating registered users. It accepts a JSON payload containing the user's email and password, and returns a JSON Web Token (JWT) if the email and password are valid.
@@ -49,52 +113,62 @@ This endpoint is used for authenticating registered users. It accepts a JSON pay
 **Request Body**
 ```
 {
-    "email": "user@example.com",
-    "password": "password123"
+    "email": <email>,
+    "password": <string>
 }
 ```
-**Response**
+**Response:**
 
-**Status code:** 200 OK
+   - **Status code:** 200 OK
 
-**Body:**
+   - **Body:**
 
 ```
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZXhhbXBsZS5jb20iLCJleHAiOjE2MjIyNzE5MjYsImlhdCI6MTYyMjI1NTkyNn0.3ey9mCz8WtYr5JrK5rOmLHvzZwWQ2F2ASuoKjOYlGJk"
+    "token": <string>
 }
 ```
-Possible Errors
 
-**Status code:** 400 Bad Request
 
-**Body:**
+**Possible Errors:**
+
+   - **Status code:** 400 Bad Request
+
+   - **Body:**
 
 ```
 {
     "message": "Invalid request payload"
 }
 ```
-**Status code:** 401 Unauthorized
 
-**Body:**
+
+
+   - **Status code:** 401 Unauthorized
+
+   - **Body:**
 ```
 {
     "message": "Invalid email or password"
 }
 ```
-**Status code:** 500 Internal Server Error
 
-**Body:**
+
+
+   - **Status code:** 500 Internal Server Error
+
+   - **Body:**
 ```
 {
     "message": "Internal server error"
 }
 ```
-### Event Endpoints
+
+
+### **Event Endpoints**
 These endpoints are used for receiving, storing and retrieving events.
 
-**Create Event Endpoint**
+### **Create Event Endpoint**
 - POST /api/events
 
 This endpoint is used for creating a new event. It accepts a JSON payload containing the event data, and returns the created event data in JSON format.
@@ -120,11 +194,11 @@ Authorization: Bearer [JWT token]
 }
 ```
 
-**Response**
+**Response:**
 
-**Status Code: 200**
+   - **Status Code: 200**
 
-**Body:**
+   - **Body:**
 
 ```
 {
@@ -132,7 +206,7 @@ Authorization: Bearer [JWT token]
 }
 ```  
 
-**Get All Events Endpoint**
+### **GetAllEvents Endpoint**
 - GET /api/events
 
 This endpoint retrieves all events stored in the system.
@@ -141,11 +215,11 @@ This endpoint retrieves all events stored in the system.
 
 Authorization: Bearer [JWT token]
 
-**Response**
+**Response:**
 
-**Status Code: 200**
+   - **Status Code: 200**
 
-**Body:**
+   - **Body:**
 
 ```
 {
@@ -164,8 +238,7 @@ Authorization: Bearer [JWT token]
     ...
 }
 ```
-
-**GetEventByID**
+### **GetEventByID Endpoint**
 - GET /api/events/:id
 
 This endpoint retrieves event with specific ID stored in the system.
@@ -174,11 +247,11 @@ This endpoint retrieves event with specific ID stored in the system.
 
 Authorization: Bearer [JWT token]
 
-**Response**
+**Response:**
 
-**Status Code: 200**
+   - **Status Code: 200**
 
-**Body:**
+   - **Body:**
 ```
 {
     "event_type": <int>,
@@ -194,7 +267,8 @@ Authorization: Bearer [JWT token]
 }
 ```
 
-**GetEventsByTypeID**
+### **GetEventsByTypeID Endpoint**
+
 - GET /api/events/types/:id
 
 This endpoint retrieves events with specific typeIDs stored in the system.
@@ -203,11 +277,11 @@ This endpoint retrieves events with specific typeIDs stored in the system.
 
 Authorization: Bearer [JWT token]
 
-**Response**
+**Response:**
 
-**Status Code: 200**
+   - **Status Code: 200**
 
-**Body:**
+   - **Body:**
 ```
 {
     {
@@ -226,7 +300,7 @@ Authorization: Bearer [JWT token]
 }
 ```
 
-**DeleteEventByID**
+### **DeleteEventByID Endpoint**
 - DELETE /api/events/:id
 
 This endpoint deletes event with specific ID stored in the system.
@@ -237,14 +311,27 @@ Authorization: Bearer [JWT token]
 
 **Response**
 
-**Status Code: 200**
+   - **Status Code: 200**
 
-**Body:**
+   - **Body:**
 ```
 {
     "message": "Successfully deleted the event"
 }
 ```
 
+## RabbitMQ implementation
 
+This microservice API uses RabbitMQ to handle the creation of new events. RabbitMQ is a message broker that allows applications to communicate with each other asynchronously by sending and receiving messages through a messaging queue. In this implementation, the Create Event endpoint sends a message to a RabbitMQ queue, and a separate consumer service handles the message and stores the new event in the database.
 
+### Architecture
+The RabbitMQ implementation consists of the following components:
+
+- **Producer:** The Create Event endpoint is the producer in this implementation. It sends a message to the RabbitMQ queue containing the information about the new event.
+
+- **Queue:** RabbitMQ provides a messaging queue that holds the messages produced by the Create Event endpoint until they are consumed by the consumer service.
+
+- **Consumer:** The consumer service is a separate microservice that is responsible for handling the messages from the RabbitMQ queue. When a new message arrives, the consumer service reads the message and stores the new event in the database.
+
+**Implementation Details**
+To implement the RabbitMQ integration, we used the github.com/streadway/amqp library for Go. This library provides a simple API for interacting with RabbitMQ.
