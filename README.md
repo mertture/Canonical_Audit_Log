@@ -420,13 +420,6 @@ curl -X GET \
   -H 'Authorization: Bearer <token>'
 ```
 
-8. Health check for the service
-
-```bash
-curl -X GET \
-  http://localhost:8080/api/health-check \
-```
-
 8. Delete events by event ID by sending a DELETE request to the /api/events/:id endpoint with the Authorization header set to the value of the token field. 
 
 ```bash
@@ -435,6 +428,11 @@ curl -X DELETE \
   -H 'Authorization: Bearer <token>'
 ```
 
+9. Health check for the service
+
+```bash
+curl -X GET \
+  http://localhost:8080/api/health-check
 
 
 ## Design and Architecture Decisions
